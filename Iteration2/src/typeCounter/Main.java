@@ -1,4 +1,5 @@
 package typeCounter;
+import java.io.File;
 import java.util.Scanner;
 
 /**
@@ -31,11 +32,14 @@ public class Main {
 			type = reader.nextLine();
 			System.out.println();
 		}
-		$.log(path).log(type);
-		reader.close();
+	
+		File currentDir = new File(path);
+	//	reader.close();
 		
 		// Passes args/user input to TypeCounter
-		final TypeCounter tc = new TypeCounter(path,type);
-		tc.findAndPrintDeclarationsAndReferences();
+		//final TypeCounter tc = new TypeCounter(path,type);
+		//tc.findAndPrintDeclarationsAndReferences();
+		RecursiveTest rt = new RecursiveTest(path);
+		rt.displayDirectoryContents(currentDir);
 	}
 }

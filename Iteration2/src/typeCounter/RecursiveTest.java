@@ -39,6 +39,8 @@ public class RecursiveTest {
 				 */
 				public boolean visit(TypeDeclaration node){
 					String nodeString = node.getName().getFullyQualifiedName();
+					// delete this later
+					System.out.println(nodeString);
 					
 					// counter for declaration type of interes
 					

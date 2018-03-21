@@ -41,5 +41,6 @@ public class Main {
 		//tc.findAndPrintDeclarationsAndReferences();
 		RecursiveTest rt = new RecursiveTest(path);
 		rt.displayDirectoryContents(currentDir);
+		rt.findDeclarations();
 	}
 }

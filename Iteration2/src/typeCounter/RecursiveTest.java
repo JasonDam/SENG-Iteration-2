@@ -1,4 +1,4 @@
-//ver1
+//ver1 16:37 mar 21
 package typeCounter;
 
 import java.io.File;

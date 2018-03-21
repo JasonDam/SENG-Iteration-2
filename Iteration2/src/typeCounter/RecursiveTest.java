@@ -6,6 +6,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class RecursiveTest {
 	
@@ -20,10 +22,10 @@ public class RecursiveTest {
 	
 	public static void displayDirectoryContents(File dir) {
 		
+		// USE set to elminate doubles that might come from a loop
+		Set<String> hs = new HashSet<>();
 		try {
 			File[] files = dir.listFiles();
-		
-			
 			for (File file : files) {
 				if (file.isDirectory()) {
 					System.out.println("directory:" + file.getCanonicalPath());
@@ -34,18 +36,25 @@ public class RecursiveTest {
 								return name.toLowerCase().endsWith(".java");
 							}
 					 });
+					 
+					 for(int i = 0; i < files.length; i++){
+							String filePath = files[i].getPath();
+							System.out.print(filePath);
+							fileList.add(filePath);
 					 }
-			}
-			
-			System.out.println(Arrays.toString(files));
-			
+					}
+				}
+			// used THIS to print out that .java files are filtered out from EACH directory given, recursively
+		//	System.out.println(Arrays.toString(files));
+		hs.addAll(fileList);
+		fileList.clear();
+		fileList.addAll(hs);
+		System.out.println(Arrays.deepToString(fileList.toArray()));	
+		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		String tester = Arrays.toString(fileList.toArray());
-		// used THIS to print out that .java files are filtered out from EACH directory given, recursively
-		System.out.println (tester);
+	
 	}
 
 	

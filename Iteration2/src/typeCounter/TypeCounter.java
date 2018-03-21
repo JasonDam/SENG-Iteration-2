@@ -22,13 +22,12 @@ public class TypeCounter {
 	final Logger $ = new Logger();
 	
 	private String fullDeclarationType;
-	private static String folderPath;
+	private String folderPath;
 	private String declarationType;
 	private ArrayList<String> fileList;
 	
 	private int declarationCounter = 0;
 	private int referenceAndDeclarationCounter = 0;
-	static File dir = new File(folderPath);
 	
 	/**
 	 * Constructor sets the folderPath, type, and 
@@ -39,7 +38,7 @@ public class TypeCounter {
 	 */
 	public TypeCounter(String folderPath, String type){
 		this.fullDeclarationType = type;
-		this.folderPath = folderPath;
+		this.folderPath = findFolder(folderPath, type);
 		this.declarationType = abridgeType(type);
 		this.fileList = changeFileList(this.folderPath);
 		
@@ -230,20 +229,26 @@ public class TypeCounter {
 	private ArrayList<String> changeFileList(String folderPath){
 		ArrayList<String> fileList = new ArrayList<String>();
 		File dir = new File(folderPath);
-		File[] files = dir.listFiles();	
+		$.log(folderPath);
+		
 		// Filter files that end with .java
-		 files = dir.listFiles(new FilenameFilter(){
+		final File[] files = dir.listFiles(new FilenameFilter(){
 			public boolean accept(File dir, String name){
 				return name.toLowerCase().endsWith(".java");
 			}
 		});
+		
+		$.log(folderPath);
+		
 		// files.length if file is null will result in an exception
 		if(files == null) return fileList;
+		
+		$.log("File Paths:" + files.length);
 		
 		// adds to fileList the files in the specified path
 		for(int i = 0; i < files.length; i++){
 			String filePath = files[i].getPath();
-			System.out.print(filePath);
+			$.log(filePath);
 			fileList.add(filePath);
 		}
 		return fileList;
@@ -271,8 +276,38 @@ public class TypeCounter {
 		return result;
 	}
 	
+	/**
+	 * Finds the full path inside the packages
+	 * @param path
+	 * @param type
+	 * @return the full path
+	 */
+	private String findFolder(String path, String type) {
+		final char[] typeInChar = type.toCharArray();
+		ArrayList<String> toPath = new ArrayList<String>();
+		
+		int previousI = 0;
+		for(int i = 0; i < type.length(); i++){
+			// find the . in the type
+			if(typeInChar[i] == (".".toCharArray()[0])){
+				// append characters before the . to path
+				toPath.add("\\" + type.substring(previousI, i));
+				
+				// ensures that the substring is in between the "."s
+				previousI = i + 1;
+			}
+		}
+		
+		// create new path
+		for(String folders : toPath)
+			path = path + folders;
+		
+		$.log(path);
+		return path;
+	}
 	
-	
+	//Getters and setters\\
+
 	public String getFolderPath(){
 		return this.folderPath;
 	}

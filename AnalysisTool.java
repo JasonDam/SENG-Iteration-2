@@ -18,7 +18,6 @@ import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
  * This tool takes a path directory and Java type and parses all the
  * files with .java extensions. The amount of declarations
  * and references withing all the files is printed to the console
- * @author Josh, Logan, Madhu
  *
  */
 public class AnalysisTool {

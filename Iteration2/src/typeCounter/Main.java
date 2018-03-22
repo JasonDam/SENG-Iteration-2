@@ -8,7 +8,7 @@ import java.util.Scanner;
  *
  */
 public class Main {
-	private static String type;
+	private static String jars;
 	private static String path;
 	final static Logger $ = new Logger();
 	
@@ -22,22 +22,24 @@ public class Main {
 		if(args.length == 2){
 			// Use arguments if they exist
 			path = args[0];
-			type = args[1];
+			jars = args[1];
 		} else {
 			// Else ask for arguments
 			System.out.println("No arguments specified.");
 			System.out.print("Enter path:");
 			path = reader.nextLine();
+			jars = reader.nextLine();
 				}
 	
-		File currentDir = new File(path);
+		//File currentDir = new File(path);
+		File jarFile = new File(jars);
 	//	reader.close();
 		
 		// Passes args/user input to TypeCounter
 		//final TypeCounter tc = new TypeCounter(path,type);
 		//tc.findAndPrintDeclarationsAndReferences();
 		RecursiveTest rt = new RecursiveTest(path);
-		rt.displayDirectoryContents(currentDir);
-		rt.findDeclarations();
+		//rt.displayDirectoryContents(currentDir);
+		rt.countInJarOrDirectory();
 	}
 }

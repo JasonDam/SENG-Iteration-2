@@ -19,10 +19,11 @@ public class RecursiveTest {
 	
 	String folderPath;
 	static ArrayList<String> fileList = new ArrayList<String>();
-
+	File currentDir;
 	
 	public RecursiveTest(String path) {
 		this.folderPath = path;
+		this.currentDir = new File(path);
 	}
 	
 	
@@ -87,6 +88,13 @@ public class RecursiveTest {
 		return content.toCharArray();
 	}
 	
+	public void countInJarOrDirectory() {
+		if (this.folderPath.toLowerCase().endsWith(".jar"))
+			System.out.print("Read Jar");
+		else
+			this.displayDirectoryContents(currentDir);
+	}
+	
 	public static void displayDirectoryContents(File dir) {
 		// USE set to eliminate element doubles that might come from a loop
 		Set<String> hs = new HashSet<>();
@@ -99,8 +107,15 @@ public class RecursiveTest {
 				} else {
 					 files = dir.listFiles(new FilenameFilter(){
 							public boolean accept(File dir, String name){
-								return name.toLowerCase().endsWith(".java");
-							}
+								if(name.toLowerCase().endsWith(".java"))
+									return name.toLowerCase().endsWith("java");
+							// this is NOT what was required, instead of automatically looking in Jar, files, ask USER to
+							// input jar File of INTEREST and look into that. 
+								else
+									return name.toLowerCase().endsWith("jar");
+							} 
+							
+							
 					 });
 					 
 					 for(int i = 0; i < files.length; i++){

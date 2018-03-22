@@ -23,27 +23,28 @@ public class Main {
 		Scanner reader = new Scanner(System.in);
 		if(args.length == 2){
 			// Use arguments if they exist
-			path = args[0];
-			jars = args[1];
+			//path = args[0];
+			jars = args[0];
 		} else {
 			// Else ask for arguments
-			System.out.println("No arguments specified.");
-		//	System.out.print("Enter JARFILE:");
-			path = reader.nextLine();
+			//System.out.println("No arguments specified.");
+			System.out.print("Enter JARFILE:");
+	///		path = reader.nextLine();
 			jars = reader.nextLine();
 				}
 	
-		File currentDir = new File(path);
-		//File jarFile = new File(jars);
+		//File currentDir = new File(path);
+		File jarFile = new File(jars);
 	//	reader.close();
 		
 		// Passes args/user input to TypeCounter
 		//final TypeCounter tc = new TypeCounter(path,type);
 		//tc.findAndPrintDeclarationsAndReferences();
-		RecursiveTest rt = new RecursiveTest(path);// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
-		rt.displayDirectoryContents(currentDir);
- 	rt.countInJarOrDirectory();// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
-	//	CounterInJar ct = new CounterInJar(jars);
+	//	RecursiveTest rt = new RecursiveTest(path);// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
+	//	rt.displayDirectoryContents(currentDir);
+ 	//rt.countInJarOrDirectory();// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
+		CounterInJar ct = new CounterInJar(jars);
+		ct.recursiveListJars();
 		
 	}
 }

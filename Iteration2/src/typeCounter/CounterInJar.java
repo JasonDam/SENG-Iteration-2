@@ -15,18 +15,28 @@ import java.util.zip.ZipException;
 public class CounterInJar {
 
 	String nameOfFile;
+	File jarFilesOne;
 	JarFile jars;
+	static ArrayList<String> jarFileList = new ArrayList <String>();
 	
 	public CounterInJar (String fileName) throws IOException {
 		this.nameOfFile = fileName;
-		this.jars = new JarFile(this.nameOfFile);
+		this.jarFilesOne = new File(nameOfFile);
+		this.jars = new JarFile(jarFilesOne);
 
 	}
 	
+	public void recursiveListJars() {
+		Enumeration<JarEntry> enumeration = this.jars.entries();
+			while (enumeration.hasMoreElements()) {
+				ZipEntry zipEntry = enumeration.nextElement();
+				System.out.print(zipEntry.getName());
+			}
+	}
+	
+	
 	public Map<String, List<Class<?>>> loadAndScanJar(File jarFile)
 	        throws ClassNotFoundException, ZipException, IOException {
-
-		
 		// STUDY and change this.
 	    // Load the jar file into the JVM
 	    // You can remove this if the jar file already loaded.

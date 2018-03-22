@@ -1,0 +1,46 @@
+Seng 300 Group 11
+	Sidney Shane Dizon
+	Sunah Kim
+	Kristopher Tang
+
+Seng 300 Group 11 Assignment 1 Guidelines
+
+To be Submitted:
+1. Source Code for the Java Application Assignment
+2. Automated Test Suites for testing the application
+3. Structural Diagram
+4. Sequence Diagram
+5. State Diagram
+6. Optional Supplementary explanation
+7. Git log
+
+Source Code Requirements:
+1. Takes a pathname to indicate a directory of interest
+2. Takes a string to indicate a fully qualified name of a Java type
+3. Counts the number of declarations of that type within that directory
+4. Counts the number of references to each occurrence of that type within that directory
+5. The output must a string written to the console stating the name of the type, the count of declarations, and the count of references;
+
+	<type>. Declarations found: <count>; references found: <count>.
+
+where the <type> and two <count>s are to be replaced with the relevant values.
+
+Notes for creating the source code:
+1. ASTParser could be used to find class declarations.
+	In the ASTParser, a visitor can be created so that the visitor could visit nodes in the AST.
+	The nodes that can be visited by the visitor are 'Class' type declarations node in which could simplify
+	out parsing of the .java file for counting how many delcarations we have encountered.
+
+
+Automated Test Suites Requirements:
+1. Logical Test Case Selection
+	a) Consider checking for error and exceptions
+	b) Consider checking for expected results
+	c) Consider assertions
+2. Coverage
+
+Git Log
+1. Demonstrates who performed commits over time.
+
+
+

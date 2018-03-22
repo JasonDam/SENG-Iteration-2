@@ -28,7 +28,7 @@ public class Main {
 		} else {
 			// Else ask for arguments
 			//System.out.println("No arguments specified.");
-			System.out.print("Enter JARFILE:");
+			System.out.print("Enter PATHNAME for JARFILE:");
 	///		path = reader.nextLine();
 			jars = reader.nextLine();
 				}

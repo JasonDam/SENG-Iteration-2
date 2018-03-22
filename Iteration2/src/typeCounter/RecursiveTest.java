@@ -90,9 +90,12 @@ public class RecursiveTest {
 	
 	public void countInJarOrDirectory() {
 		if (this.folderPath.toLowerCase().endsWith(".jar"))
+			// just add this one file to fileList, so it can be parsed(just one file if a Jar of interest)
 			System.out.print("Read Jar");
+		
 		else
 			this.displayDirectoryContents(currentDir);
+			this.findDeclarations();
 	}
 	
 	public static void displayDirectoryContents(File dir) {

@@ -32,6 +32,9 @@ public class CounterInJar {
 			while (enumeration.hasMoreElements()) {
 				ZipEntry zipEntry = enumeration.nextElement();
 				System.out.print(zipEntry.getName());
+				// use the name, create file. create new method call that takes the file as a dir
+				// pass into this new method, use recursive calls if it is a directory to get all .java files
+				// finally add the java files to a list, and parse using method from other class
 			}
 	}
 	

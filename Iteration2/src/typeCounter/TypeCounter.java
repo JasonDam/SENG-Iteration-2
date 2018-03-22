@@ -19,7 +19,7 @@ import org.eclipse.jdt.core.dom.*;
  */
 public class TypeCounter {
 	
-	final Logger $ = new Logger();
+
 	
 	private String fullDeclarationType;
 	private String folderPath;
@@ -42,9 +42,7 @@ public class TypeCounter {
 		this.declarationType = abridgeType(type);
 		this.fileList = changeFileList(this.folderPath);
 		
-		$.log("full type " + this.fullDeclarationType)
-		.log("new path " + this.folderPath)
-		.log("abridged type " + this.declarationType);
+		
 	}
 
 	/**
@@ -75,7 +73,7 @@ public class TypeCounter {
 	 */
 	protected void findDeclarations(){
 		for(String file:fileList){
-			$.log(file);
+		
 			// creating ASTs for every file in the file list
 			this.parse(file).accept(new ASTVisitor(){
 				/**
@@ -91,8 +89,7 @@ public class TypeCounter {
 					if (nodeString.equals(declarationType))
 						declarationCounter++;	 
 					
-					$.log("TEST " + nodeString).log("\nTEST2" + declarationType)
-					.log(declarationType + " Declarations " + declarationCounter);
+					
 					
 					return true; // true -- explore subnodes
 				}
@@ -111,8 +108,6 @@ public class TypeCounter {
 					if (nodeString.equals(declarationType))
 						declarationCounter++;	 
 					
-					$.log("TEST " + nodeString).log("\nTEST2" + declarationType)
-					.log(declarationType + " Declarations " + declarationCounter);
 					
 					return true; // true -- explore subnodes
 				 }
@@ -131,8 +126,6 @@ public class TypeCounter {
 					if (nodeString.equals(declarationType))
 						declarationCounter++;	 
 					
-					$.log("TEST " + nodeString).log("\nTEST2" + declarationType)
-					.log(declarationType + " Declarations " + declarationCounter);
 					
 					return true; // true -- explore subnodes
 				 }
@@ -161,7 +154,7 @@ public class TypeCounter {
 					if(declarationType.equals(nodeString)){
 						referenceAndDeclarationCounter++;
 					}
-					$.log(nodeString);
+				
 					return true;
 				}
 
@@ -173,7 +166,7 @@ public class TypeCounter {
 					if(declarationType.equals(nodeString)){
 						referenceAndDeclarationCounter++;
 					}
-					$.log(nodeString);
+					
 					return true;
 				}
 			});
@@ -207,15 +200,15 @@ public class TypeCounter {
 	 * @return contents of the file in a string
 	 */
 	private char[] fileContentToCharArray(String path) {
-		$.log("reading file from " + path);
+		
 		
 		String content = null;
 		try{
 			content = new String(Files.readAllBytes(Paths.get(path)));
-			$.log("Contains " + content);
+			
 		} catch (IOException e){
 			e.printStackTrace();
-			$.log("IOEXCEPTION");
+		
 			;}
 		
 		return content.toCharArray();
@@ -229,7 +222,7 @@ public class TypeCounter {
 	private ArrayList<String> changeFileList(String folderPath){
 		ArrayList<String> fileList = new ArrayList<String>();
 		File dir = new File(folderPath);
-		$.log(folderPath);
+		
 		
 		// Filter files that end with .java
 		final File[] files = dir.listFiles(new FilenameFilter(){
@@ -238,17 +231,16 @@ public class TypeCounter {
 			}
 		});
 		
-		$.log(folderPath);
-		
+
 		// files.length if file is null will result in an exception
 		if(files == null) return fileList;
 		
-		$.log("File Paths:" + files.length);
+	
 		
 		// adds to fileList the files in the specified path
 		for(int i = 0; i < files.length; i++){
 			String filePath = files[i].getPath();
-			$.log(filePath);
+		
 			fileList.add(filePath);
 		}
 		return fileList;
@@ -302,7 +294,7 @@ public class TypeCounter {
 		for(String folders : toPath)
 			path = path + folders;
 		
-		$.log(path);
+		
 		return path;
 	}
 	

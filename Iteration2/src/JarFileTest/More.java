@@ -1,5 +1,5 @@
 package JarFileTest;
 
-public class More {
+public class MORE {
 
 }

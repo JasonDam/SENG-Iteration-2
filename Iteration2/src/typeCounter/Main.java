@@ -11,14 +11,9 @@ import java.util.Scanner;
 public class Main {
 	private static String jars;
 	private static String path;
-	final static Logger $ = new Logger();
 	
-	/**
-	 * Driver passing input to TypeCounter.
-	 * Prompts for input if not is received in args
-	 * @param args
-	 * @throws IOException 
-	 */
+	
+
 	public static void main(String args[]) throws IOException{
 		Scanner reader = new Scanner(System.in);
 		if(args.length == 2){
@@ -44,7 +39,7 @@ public class Main {
 	//	rt.displayDirectoryContents(currentDir);
  	//rt.countInJarOrDirectory();// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
 		CounterInJar ct = new CounterInJar(jars);
-		ct.recursiveListJars();
+		ct.getJarElements();
 		
 	}
 }

@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.jar.JarFile;
 
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
@@ -20,10 +21,16 @@ public class RecursiveTest {
 	String folderPath;
 	static ArrayList<String> fileList = new ArrayList<String>();
 	File currentDir;
+	JarFile currentJar;
 	
-	public RecursiveTest(String path) {
+	public RecursiveTest(String path) throws IOException {
 		this.folderPath = path;
 		this.currentDir = new File(path);
+		if (path.endsWith(".jar")) {
+	//	this.currentJar = new JarFile(path);
+	
+	//	System.out.print("JAR!");
+		}
 	}
 	
 	
@@ -89,14 +96,15 @@ public class RecursiveTest {
 	}
 	
 	public void countInJarOrDirectory() {
-		if (this.folderPath.toLowerCase().endsWith(".jar"))
+		//if (this.folderPath.toLowerCase().endsWith(".jar"))
 			// just add this one file to fileList, so it can be parsed(just one file if a Jar of interest)
-			System.out.print("Read Jar");
+		//	System.out.print("Read Jar");
 		
-		else
+	//	else
 			this.displayDirectoryContents(currentDir);
 			this.findDeclarations();
 	}
+	
 	
 	public static void displayDirectoryContents(File dir) {
 		// USE set to eliminate element doubles that might come from a loop
@@ -116,9 +124,7 @@ public class RecursiveTest {
 							// input jar File of INTEREST and look into that. 
 								else
 									return name.toLowerCase().endsWith("jar");
-							} 
-							
-							
+							} 		
 					 });
 					 
 					 for(int i = 0; i < files.length; i++){

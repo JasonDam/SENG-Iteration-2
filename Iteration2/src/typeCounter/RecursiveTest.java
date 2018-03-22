@@ -41,10 +41,7 @@ public class RecursiveTest {
 					String nodeString = node.getName().getFullyQualifiedName();
 					// delete this later
 					System.out.println(nodeString);
-					
-					// counter for declaration type of interes
-					
-
+				
 					return true; // true -- explore subnodes
 				}				});
 			}
@@ -91,7 +88,7 @@ public class RecursiveTest {
 	}
 	
 	public static void displayDirectoryContents(File dir) {
-		// USE set to elminate doubles that might come from a loop
+		// USE set to eliminate element doubles that might come from a loop
 		Set<String> hs = new HashSet<>();
 		try {
 			File[] files = dir.listFiles();

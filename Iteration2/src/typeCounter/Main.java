@@ -28,10 +28,7 @@ public class Main {
 			System.out.println("No arguments specified.");
 			System.out.print("Enter path:");
 			path = reader.nextLine();
-			System.out.print("Enter type:");
-			type = reader.nextLine();
-			System.out.println();
-		}
+				}
 	
 		File currentDir = new File(path);
 	//	reader.close();

@@ -57,6 +57,7 @@ public class CounterInJar {
 	}
 	
 	// this method should recurisvely display the ".java" files in the .jar files
+
 	public List<String> getJarElements() throws IOException {
 		List <String> classNames = new ArrayList<String>();
 		ZipInputStream zip = new ZipInputStream(new FileInputStream(this.nameOfFile));
@@ -71,6 +72,7 @@ public class CounterInJar {
 				String className = entry.getName();
 				System.out.println(className);
 				classNames.add(className);
+
 			}
 		}
 		return classNames;

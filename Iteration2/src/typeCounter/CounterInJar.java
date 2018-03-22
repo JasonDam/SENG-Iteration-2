@@ -26,6 +26,7 @@ public class CounterInJar {
 
 	}
 	
+	// this method should recurisvely display the ".java" files in the .jar files
 	public void recursiveListJars() {
 		Enumeration<JarEntry> enumeration = this.jars.entries();
 			while (enumeration.hasMoreElements()) {
@@ -35,6 +36,7 @@ public class CounterInJar {
 	}
 	
 	
+	// IGNORE THIS FOR NOW, online resource we can build upon
 	public Map<String, List<Class<?>>> loadAndScanJar(File jarFile)
 	        throws ClassNotFoundException, ZipException, IOException {
 		// STUDY and change this.

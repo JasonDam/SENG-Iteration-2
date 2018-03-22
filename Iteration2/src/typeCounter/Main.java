@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 /**
  * Driver accepting the path and type
- * @author Elvin
+ * @author Tony
  *
  */
 public class Main {

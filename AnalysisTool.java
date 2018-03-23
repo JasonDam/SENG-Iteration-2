@@ -2,6 +2,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -18,7 +25,6 @@ import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
  * This tool takes a path directory and Java type and parses all the
  * files with .java extensions. The amount of declarations
  * and references withing all the files is printed to the console
- * @author Josh, Logan, Madhu
  *
  */
 public class AnalysisTool {
@@ -27,15 +33,22 @@ public class AnalysisTool {
 	private String type;
 	private int dCount;
 	private int rCount;
+	private static Map <String, ArrayList<Integer>> typeMap = new HashMap<String,ArrayList<Integer>>();
+	private List<String> fileList;
 	
 	public static void main(String[] args) {
-		if(args.length != 2) {
-			throw new IllegalArgumentException();
-		}
+		if(args.length != 1) {
+				throw new IllegalArgumentException();
+			}
+		AnalysisTool toolA = new AnalysisTool(args[0]);
 		
-		AnalysisTool toolA = new AnalysisTool(args[0],args[1]);
-		toolA.getFile(toolA.getPathName());
-		System.out.println(toolA.printResult());
+		if (toolA.pathname.matches(".*\\.jar")) {
+			toolA.scanJar();
+		}
+		else {
+		toolA.searchDirectory(new File(toolA.pathname));
+		}
+		toolA.printResult();
 	}
 	
 	public String getPathName() {
@@ -57,18 +70,20 @@ public class AnalysisTool {
 	 * @param path directory to be searched
 	 * @param type to search for during parsing
 	 */
-	public AnalysisTool(String path, String type) {
+	public AnalysisTool(String path) {
 		dCount = 0;
 		rCount = 0;
 		pathname = path;
-		this.type = type;
 	}
 	/**
 	 * The results of the AnalysisTool
 	 * @return String containing the results
 	 */
-	public String printResult() {
-		return type+". Declarations found: "+dCount+"; references found: "+rCount+".";
+	public void printResult() {
+		for (String key : typeMap.keySet()) {
+			ArrayList<Integer> currentArray = typeMap.get(key);
+		    System.out.println(key+". Declarations found: " + currentArray.get(0)+"; references found: "+currentArray.get(1)+".");
+		}
 	}
 	
 	/**
@@ -96,7 +111,19 @@ public class AnalysisTool {
 			 */
 			public boolean visit(TypeDeclaration node) {
 				String nodeName = node.getName().getFullyQualifiedName();
-				if(nodeName.equals(getType())) dCount++;
+				if(typeMap.containsKey(nodeName)) {
+					ArrayList<Integer> currentArray = typeMap.get(nodeName); //declerations
+					int currentValue = currentArray.get(0);
+					currentArray.set(0, currentValue+1);
+					
+					typeMap.replace(nodeName, currentArray);
+				}
+				else {
+					ArrayList<Integer> intArray = new ArrayList<Integer>();
+					intArray.add(1);
+					intArray.add(0);
+					typeMap.put(nodeName,intArray);
+				}
 				return true;
 			}
 			
@@ -112,7 +139,19 @@ public class AnalysisTool {
 				ITypeBinding typeBind = node.resolveBinding();
 				
 				String typeNode = typeBind.getQualifiedName();
-				if(typeNode.equals(getType())) dCount++;
+				if(typeMap.containsKey(typeNode)) {
+					ArrayList<Integer> currentArray = typeMap.get(typeNode); //declerations
+					int currentValue = currentArray.get(0);
+					currentArray.set(0, currentValue+1);
+					
+					typeMap.replace(typeNode, currentArray);
+				}
+				else {
+					ArrayList<Integer> intArray = new ArrayList<Integer>();
+					intArray.add(1);
+					intArray.add(0);
+					typeMap.put(typeNode,intArray);
+				}
 				
 				return true;
 			}
@@ -128,7 +167,19 @@ public class AnalysisTool {
 			public boolean visit(AnnotationTypeDeclaration node) {
 				ITypeBinding typeBind = node.resolveBinding();
 				String typeNode = typeBind.getQualifiedName();				
-				if(typeNode.equals(getType())) dCount++;
+				if(typeMap.containsKey(typeNode)) {
+					ArrayList<Integer> currentArray = typeMap.get(typeNode); //declerations
+					int currentValue = currentArray.get(0);
+					currentArray.set(0, currentValue+1);
+					
+					typeMap.replace(typeNode, currentArray);
+				}
+				else{
+					ArrayList<Integer> intArray = new ArrayList<Integer>();
+					intArray.add(1);
+					intArray.add(0);
+					typeMap.put(typeNode,intArray);
+					}
 				return true;
 			}
 			
@@ -138,8 +189,21 @@ public class AnalysisTool {
 			 * @return false to not visit children
 			 */
 			public boolean visit(QualifiedName node) {
-				if(node.getFullyQualifiedName().equals(getType())) rCount++;
-				return false;
+				String nodeName = node.getFullyQualifiedName();
+				if(typeMap.containsKey(nodeName)) {
+					ArrayList<Integer> currentArray = typeMap.get(nodeName); //rcount
+					int currentValue = currentArray.get(1);
+					currentArray.set(1, currentValue+1);
+					
+					typeMap.replace(nodeName, currentArray);
+				}
+				else { 
+					ArrayList<Integer> intArray = new ArrayList<Integer>();
+					intArray.add(0);
+					intArray.add(1);
+					typeMap.put(nodeName,intArray);
+				}
+				return true;
 			}
 			
 			/**
@@ -150,7 +214,19 @@ public class AnalysisTool {
 			public boolean visit(VariableDeclarationFragment node) {
 				IVariableBinding rNode = node.resolveBinding();
 				String typeNode = rNode.getType().getQualifiedName();
-				if(typeNode.equals(getType())) rCount++;
+				if(typeMap.containsKey(typeNode)) {
+					ArrayList<Integer> currentArray = typeMap.get(typeNode); //rcount
+					int currentValue = currentArray.get(1);
+					currentArray.set(1, currentValue+1);
+					
+					typeMap.replace(typeNode, currentArray);
+				}
+				else { 
+					ArrayList<Integer> intArray = new ArrayList<Integer>();
+					intArray.add(0);
+					intArray.add(1);
+					typeMap.put(typeNode,intArray);
+				}
 				return false;
 			}
 			
@@ -189,17 +265,22 @@ public class AnalysisTool {
 	 * https://stackoverflow.com/questions/1844688/how-to-read-all-files-in-a-folder-from-java
 	 * @param path directory to look for files
 	 */
-	public void getFile(String path) {
-		File folder = new File(path);
-		File[] listOfFiles = folder.listFiles();
 
-		for (File file : listOfFiles) {
-		    if (file.isFile()) {
-		    		if(file.getName().matches(".*\\.java")) {
-		    			parseTool(path+"\\"+file.getName());
-		    		}
-		    }
+		public void searchDirectory(File dir) {
+			File[] files = dir.listFiles();
+			for (File file : files) {
+				if (file.isDirectory()) {
+					searchDirectory(file);
+				} else if(file.getName().matches(".*\\.java")) {
+					try {
+						parseTool(file.getCanonicalPath());
+						//fileList.add(file.getCanonicalPath());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
-	}
-
+		
+		public int scanJar() {return 0;}
 }

@@ -33,22 +33,13 @@ public class Main {
 	//	reader.close();
 		
 		
-		
-		// Passes args/user input to TypeCounter
-		if(pathOrJars.endsWith(".jar")) {
-			CounterInJar ct = new CounterInJar(pathOrJars);
-			ct.getJarElements();
-		}
-		else {
-			RecursiveTest rt = new RecursiveTest(pathOrJars);// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
-			rt.displayDirectoryContents(pathOrJarFile);
-		 	rt.countInJarOrDirectory();// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
-		 	
-		}
-		//final TypeCounter tc = new TypeCounter(path,type);
-		//tc.findAndPrintDeclarationsAndReferences();
-	//	RecursiveTest rt = new RecursiveTest(path);// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
 	
+			RecursiveTest rt = new RecursiveTest(pathOrJars);// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
+			rt.countInJarOrDirectory();// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
+
+		//	 CounterInJar ct = new CounterInJar(pathOrJars);
+		//	 ct.getJarElements(); 
 				
+		
 	}
 }

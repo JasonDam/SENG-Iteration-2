@@ -282,7 +282,11 @@ public class RecursiveTest {
 	
 	
 	
-	
+	/**
+	 * source from https://stackoverflow.com/questions/1529611/how-to-write-a-java-program-which-can-extract-a-jar-file-and-store-its-data-in-s EDIT CODE
+	 * @return
+	 * @throws IOException
+	 */
 	public String extractJarFiles() throws IOException {
 		 java.util.jar.JarFile jarfile = new java.util.jar.JarFile(new java.io.File(this.folderPath)); //jar file path(here sqljdbc4.jar)
 		    java.util.Enumeration<java.util.jar.JarEntry> enu= jarfile.entries();

@@ -31,6 +31,7 @@ public class RecursiveTest {
 	File currentDir;
 	JarFile currentJar;
 	private static Map <String, ArrayList<Integer>> typeMap = new HashMap <String, ArrayList<Integer>>();
+	String destdir;
 	
 	public RecursiveTest(String path) throws IOException {
 		this.folderPath = path;
@@ -40,9 +41,15 @@ public class RecursiveTest {
 	
 	public void countInJarOrDirectory() throws IOException {
 		if (this.folderPath.endsWith(".jar")) {
-			this.getJarElements();
-			fileList = this.getJarElements();
-		    this.findDeclarations();
+			this.extractJarFiles();
+			this.currentDir = new File("/Users/TonyTea/Desktop/destinationDirectoryOne");
+			this.displayDirectoryContents(currentDir);
+			this.findDeclarations();
+			this.printResults();
+			
+			//	this.getJarElements();
+		//	fileList = this.getJarElements();
+		  //  this.findDeclarations();
 		//	this.printResults();
 		}
 		else {
@@ -278,39 +285,40 @@ public class RecursiveTest {
 	}
 	
 	
+	
+	
+	public String extractJarFiles() throws IOException {
+		 java.util.jar.JarFile jarfile = new java.util.jar.JarFile(new java.io.File(this.folderPath)); //jar file path(here sqljdbc4.jar)
+		    java.util.Enumeration<java.util.jar.JarEntry> enu= jarfile.entries();
+		    while(enu.hasMoreElements())
+		    {
+		    		// get user to enter directory
+		        String destdir = "/Users/TonyTea/Desktop/destinationDirectoryOne";     //abc is my destination directory
+		        java.util.jar.JarEntry je = enu.nextElement();
 
-	public String getJavaStuff(File dir) {
-	
-		File[] files = dir.listFiles();
-		for (File file: files) {
-			if (file.isDirectory()) {
-				getJavaStuff(dir);
-			}
-			else {
-				 files = dir.listFiles(new FilenameFilter(){
-						public boolean accept(File dir, String name){
-							
-							
-							
-							if(name.toLowerCase().endsWith(".java")) {
-							
-								return name.toLowerCase().endsWith("java");
-							}
-						// this is NOT what was required, instead of automatically looking in Jar, files, ask USER to
-						// input jar File of INTEREST and look into that. 
-							else
-								return name.toLowerCase().endsWith("jar");
-						} 		
-				 });
-				 
-				
-				}
-			
-		}
-		return null;
+		        System.out.println(je.getName());
+
+		        java.io.File fl = new java.io.File(destdir, je.getName());
+		        if(!fl.exists())
+		        {
+		            fl.getParentFile().mkdirs();
+		            fl = new java.io.File(destdir, je.getName());
+		        }
+		        if(je.isDirectory())
+		        {
+		            continue;
+		        }
+		        java.io.InputStream is = jarfile.getInputStream(je);
+		        java.io.FileOutputStream fo = new java.io.FileOutputStream(fl);
+		        while(is.available()>0)
+		        {
+		            fo.write(is.read());
+		        }
+		        fo.close();
+		        is.close();
+		    }
+			return destdir;
 	}
-	
-	
 	
 	public ArrayList<String> getJarElements() throws IOException {
 		Set<String> hs = new HashSet<>();

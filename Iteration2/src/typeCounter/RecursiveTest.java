@@ -43,8 +43,6 @@ public class RecursiveTest {
 	
 	public void countInJarOrDirectory() throws IOException {
 		if (this.folderPath.endsWith(".jar")) {
-	//		File file = new File(this.folderPath);
-	///		String somename = file.getName();
 	 		String result = this.folderPath.split(".jar")[0];
 			System.out.println(result);
 			this.extractJarFiles();
@@ -54,11 +52,6 @@ public class RecursiveTest {
 			this.printResults();
 			this.deleteDirectory(new File(this.destdir));
 			
-			
-			//	this.getJarElements();
-		//	fileList = this.getJarElements();
-		  //  this.findDeclarations();
-		//	this.printResults();
 		}
 		else {
 		this.displayDirectoryContents(currentDir);
@@ -86,7 +79,6 @@ public class RecursiveTest {
 	}
 	protected void findDeclarations(){
 		for(String file:fileList){
-			// creating ASTs for every file in the file list
 			this.parse(file).accept(new ASTVisitor(){
 				/**
 				 * finds Type Declarations and adds to
@@ -94,149 +86,153 @@ public class RecursiveTest {
 				 * the node string matches the specified
 				 * declaration type for classes and interfaces
 				 */
-				public boolean visit(TypeDeclaration node){
-					String nodeString = node.getName().getFullyQualifiedName();
-					if(typeMap.containsKey(nodeString)) {
-						ArrayList<Integer> currentArray = typeMap.get(nodeString);
+				public boolean visit(TypeDeclaration node) {
+					ITypeBinding typeBind = node.resolveBinding();
+					String nodeName = typeBind.getQualifiedName();
+					if(typeMap.containsKey(nodeName)) {
+						ArrayList<Integer> currentArray = typeMap.get(nodeName); 
 						int currentValue = currentArray.get(0);
 						currentArray.set(0, currentValue+1);
 						
-						typeMap.replace(nodeString, currentArray);
+						typeMap.replace(nodeName, currentArray);
 					}
 					else {
 						ArrayList<Integer> intArray = new ArrayList<Integer>();
 						intArray.add(1);
 						intArray.add(0);
-						typeMap.put(nodeString,intArray);
+						typeMap.put(nodeName,intArray);
 					}
-					//System.out.println(nodeString);
-				
-					return true; 
+					return true;
 				}
 				
-			/**
-			 * find enum declarations 
-			 */
+				/**
+				 * Used for Enum declarations
+				 * Gets the name of the node and compares to
+				 * the type to look for, if the same
+				 * increases dCount by 1
+				 * @param node of the type EnumDeclaration
+				 * @return true to visit the children nodes
+				 */
 				public boolean visit(EnumDeclaration node) {
 					ITypeBinding typeBind = node.resolveBinding();
-					String nodeString = typeBind.getQualifiedName();
 					
-					if(typeMap.containsKey(nodeString)) {
-						ArrayList<Integer> currentArray = typeMap.get(nodeString);
+					String typeNode = typeBind.getQualifiedName();
+					if(typeMap.containsKey(typeNode)) {
+						ArrayList<Integer> currentArray = typeMap.get(typeNode); //declerations
 						int currentValue = currentArray.get(0);
 						currentArray.set(0, currentValue+1);
-						
-						typeMap.replace(nodeString, currentArray);
-					}
-					else {
-						ArrayList<Integer> intArray = new ArrayList<Integer>();
-						intArray.add(1);
-						intArray.add(0);
-						typeMap.put(nodeString,intArray);
-					}
-					
-					//System.out.println(nodeString);
-					
-					return true;
-				}
-				
-				public boolean visit(AnnotationTypeDeclaration node) {
-					ITypeBinding typeBind = node.resolveBinding();
-					String nodeString = typeBind.getQualifiedName();
-					if(typeMap.containsKey(nodeString)) {
-						ArrayList<Integer> currentArray = typeMap.get(nodeString);
-						int currentValue = currentArray.get(0);
-						currentArray.set(0, currentValue+1);
-						
-						typeMap.replace(nodeString, currentArray);
-					}
-					else {
-						ArrayList<Integer> intArray = new ArrayList<Integer>();
-						intArray.add(1);
-						intArray.add(0);
-						typeMap.put(nodeString,intArray);
-					}
-					//System.out.println(nodeString);
-					return true;
-				}
-				
-				/**
-				 * for references
-				 */
-				public boolean visit(QualifiedName node) {
-					String nodeString = node.getFullyQualifiedName();
-					//System.out.println(nodeString);
-					if (typeMap.containsKey(nodeString)) {
-						ArrayList<Integer> currentArray = typeMap.get(nodeString);
-						int currentValue = currentArray.get(1);
-						currentArray.set(1, currentValue+1);
-						
-						typeMap.replace(nodeString, currentArray);
-					}
-					else {
-						ArrayList<Integer> intArray = new ArrayList<Integer>();
-						intArray.add(0);
-						intArray.add(1);
-						typeMap.put(nodeString, intArray);
-					}
-					
-					return true;
-				}
-				
-				/**
-				 * for references
-				 */
-				public boolean visit(VariableDeclarationFragment node) {
-					IVariableBinding rNode = node.resolveBinding();
-					String typeNode = rNode.getType().getQualifiedName();
-					if (typeMap.containsKey(typeNode)) {
-						ArrayList<Integer> currentArray = typeMap.get(typeNode);
-						int currentValue = currentArray.get(1);
-						currentArray.set(1, currentValue+1);
 						
 						typeMap.replace(typeNode, currentArray);
 					}
 					else {
 						ArrayList<Integer> intArray = new ArrayList<Integer>();
-						intArray.add(0);
 						intArray.add(1);
-						typeMap.put(typeNode, intArray);
-					}
-				//	System.out.print(typeNode);
-					return false;
-				}
-				
-				public boolean visit(PrimitiveType node) {
-					ITypeBinding rNode = node.resolveBinding();
-					String nodeString = rNode.getQualifiedName();
-					if (typeMap.containsKey(nodeString)) {
-						ArrayList<Integer> currentArray = typeMap.get(nodeString);
-						int currentValue = currentArray.get(1);
-						currentArray.set(1, currentValue+1);
-						
-						typeMap.replace(nodeString, currentArray);
-					}
-					else {
-						ArrayList<Integer> intArray = new ArrayList<Integer>();
 						intArray.add(0);
-						intArray.add(1);
-						typeMap.put(nodeString, intArray);
+						typeMap.put(typeNode,intArray);
 					}
-				//	System.out.print(typeNode);
+					
 					return true;
 				}
 				
-			//	public boolean visit(ClassInstanceCreation node) {
-			//		return false;
-					
-			//	}
+				/**
+				 * Used for Annotation declarations
+				 * Gets the name of the node and compares to
+				 * the type to look for, if the same
+				 * increases dCount by 1
+				 * @param node of the type AnnotationTypeDeclaration
+				 * @return true to visit the children nodes
+				 */
+				public boolean visit(AnnotationTypeDeclaration node) {
+					ITypeBinding typeBind = node.resolveBinding();
+					String typeNode = typeBind.getQualifiedName();				
+					if(typeMap.containsKey(typeNode)) {
+						ArrayList<Integer> currentArray = typeMap.get(typeNode); //declerations
+						int currentValue = currentArray.get(0);
+						currentArray.set(0, currentValue+1);
+						
+						typeMap.replace(typeNode, currentArray);
+					}
+					else{
+						ArrayList<Integer> intArray = new ArrayList<Integer>();
+						intArray.add(1);
+						intArray.add(0);
+						typeMap.put(typeNode,intArray);
+						}
+					return true;
+				}
 				
+			
+				
+				/**
+				 * @param node of type VariableDeclarationFragment
+				 * Resolves the bindings so we can acquire the node's full name
+				 * @return false, don't visit children
+				 */
+				public boolean visit(VariableDeclarationFragment node) {
+					IVariableBinding rNode = node.resolveBinding();
+					String typeNode = rNode.getType().getQualifiedName();
+					if(typeMap.containsKey(typeNode)) {
+						ArrayList<Integer> currentArray = typeMap.get(typeNode); //rcount
+						int currentValue = currentArray.get(1);
+						currentArray.set(1, currentValue+1);
+						
+						typeMap.replace(typeNode, currentArray);
+					}
+					else { 
+						ArrayList<Integer> intArray = new ArrayList<Integer>();
+						intArray.add(0);
+						intArray.add(1);
+						typeMap.put(typeNode,intArray);
+					}
+					return false;
+				}
+				
+				
+				public boolean visit(SimpleType node) {
+					ITypeBinding  typeBind = node.resolveBinding();
+					String typeNode = typeBind.getQualifiedName();
+					if(typeMap.containsKey(typeNode)) {
+						ArrayList<Integer> currentArray = typeMap.get(typeNode); //rcount
+						int currentValue = currentArray.get(1);
+						currentArray.set(1, currentValue+1);
+						
+						typeMap.replace(typeNode, currentArray);
+					}
+					else { 
+						ArrayList<Integer> intArray = new ArrayList<Integer>();
+						intArray.add(0);
+						intArray.add(1);
+						typeMap.put(typeNode,intArray);
+					}
+					return true;
+				}
+				
+				
+				public boolean visit(ImportDeclaration node) {
+					IBinding typeBind = node.resolveBinding();
+					String typeNode = typeBind.getName();
+					if(typeMap.containsKey(typeNode)) {
+						ArrayList<Integer> currentArray = typeMap.get(typeNode); //rcount
+						int currentValue = currentArray.get(1);
+						currentArray.set(1, currentValue+1);
+						
+						typeMap.replace(typeNode, currentArray);
+					}
+					else { 
+						ArrayList<Integer> intArray = new ArrayList<Integer>();
+						intArray.add(0);
+						intArray.add(1);
+						typeMap.put(typeNode,intArray);
+					}
+					return true;
+				}
+		
 				
 				});
 			}
 		
 		}
-	
+
 
 	/**
 	 * Outputs a compilation unit AST from a string
@@ -259,7 +255,6 @@ public class RecursiveTest {
 		options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_5);
 		options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_5);
 		parser.setCompilerOptions(options);
-///Users/TonyTea/Documents/GitHub/SENG-Iteration-2/Iteration2/src/JarFIleSecondTest/FolderInJar2ndTest/ClassInFolderOfFolderinJar2ndTest.java
 		return (CompilationUnit) parser.createAST(null);
 	}		
 	
@@ -298,8 +293,6 @@ public class RecursiveTest {
 							public boolean accept(File dir, String name){
 								if(name.toLowerCase().endsWith(".java"))
 									return name.toLowerCase().endsWith("java");
-							// this is NOT what was required, instead of automatically looking in Jar, files, ask USER to
-							// input jar File of INTEREST and look into that. 
 								else
 									return name.toLowerCase().endsWith("jar");
 							} 		
@@ -307,7 +300,7 @@ public class RecursiveTest {
 					 
 					 for(int i = 0; i < files.length; i++){
 							String filePath = files[i].getPath();
-					//	System.out.println(filePath);
+					
 							fileList.add(filePath);
 					 }
 					}
@@ -338,19 +331,13 @@ public class RecursiveTest {
 		    java.util.Enumeration<java.util.jar.JarEntry> enu= jarfile.entries();
 		    while(enu.hasMoreElements())
 		    {
-		    		// get user to enter directory
-		       // String destdir = "Desktop";     //abc is my destination directory
-		       
-		    	//	String desdir = "Desktop";
-		    	//	System.out.println(uniqueFolderName);
+		  
 		    		File file = new File(this.folderPath);
 		    		String result = file.getName().split(".jar")[0];
 		    		System.out.println(result);
 		    		File dir = new File(result);
 		        dir.mkdir();
-		        
-		        
-		        
+		  
 		        java.util.jar.JarEntry je = enu.nextElement();
 
 		        System.out.println(je.getName());

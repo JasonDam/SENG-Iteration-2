@@ -1,5 +1,8 @@
-//ver2
+// SENG300 Iteration2
+// Members: Tony, Logan, Evan, Jason, Kristopher
+
 package typeCounter;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,42 +27,52 @@ import java.util.zip.ZipInputStream;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
 
-public class RecursiveTest {
+public class DeclarationsAndReferencesCounter {
 	
-	String abs;
-	String folderPath;
-	static ArrayList<String> fileList = new ArrayList<String>();
-	File currentDir;
-	JarFile currentJar;
+	private String folderPath;
+	private static ArrayList<String> fileList = new ArrayList<String>();
+	private File currentDir;
 	private static Map <String, ArrayList<Integer>> typeMap = new HashMap <String, ArrayList<Integer>>();
-	String destdir;
+	private String destdir;
 	
-	public RecursiveTest(String path) throws IOException {
+	// constructor 
+	DeclarationsAndReferencesCounter(String path) throws IOException {
+		
 		this.folderPath = path;
 		this.currentDir = new File(path);
 		this.destdir = (this.folderPath.split(".jar")[0]);
-
 	}
 	
+	/**
+	 *  Checks whether the user inputs a pathname for a Jar or Directory, then calls appropriate methods
+	 * @throws IOException
+	 */
 	public void countInJarOrDirectory() throws IOException {
+	
 		if (this.folderPath.endsWith(".jar")) {
 	 		String result = this.folderPath.split(".jar")[0];
 			System.out.println(result);
 			this.extractJarFiles();
-		;
+		
 			this.displayDirectoryContents(new File(result));
-			this.findDeclarations();
+			this.findDeclarationsAndReferences();
 			this.printResults();
 			this.deleteDirectory(new File(this.destdir));
-			
 		}
 		else {
-		this.displayDirectoryContents(currentDir);
-		this.findDeclarations();
-		this.printResults();
+			
+			this.displayDirectoryContents(currentDir);
+			this.findDeclarationsAndReferences();
+			this.printResults();
 		}
 }
 	
+	/**
+	 * After the entries extracted from the jar files have been extracted, and has gone through the parser and counters
+	 * the folder containing the extracted files are deleted so there is no overlap when the program is ran again
+	 * source: 
+	 * @param file
+	 */
 	private void deleteDirectory(File file ) {
 		
 		File[] contents = file.listFiles();
@@ -71,13 +84,23 @@ public class RecursiveTest {
 		file.delete();
 	}
 
-	public void printResults(){
+	/**
+	 * Declarations and References are printed, Dictionary was used to keep track of recurring declarations/references seen 
+	 * throughout the compilation unit
+	 */
+	private void printResults(){
 		for (String key: typeMap.keySet()) {
 			ArrayList<Integer> currentArray = typeMap.get(key);
-			System.out.println(key+ " Declarations found: " + currentArray.get(0)+"; References found: " + currentArray.get(1)+".");
+			//System.out.println(key+ " Declarations found: " + currentArray.get(0)+"; References found: " + currentArray.get(1)+".");
+			System.out.printf("Declarations found: %5d, References found: %5d \n", currentArray.get(0), currentArray.get(1));
 		}
 	}
-	protected void findDeclarations(){
+	
+	/**
+	 * finds and adds declarations and references to a counter in the dictionary.
+	 */
+	protected void findDeclarationsAndReferences(){
+		
 		for(String file:fileList){
 			this.parse(file).accept(new ASTVisitor(){
 				/**
@@ -187,7 +210,9 @@ public class RecursiveTest {
 					return false;
 				}
 				
-				
+				/**
+				 * node of type SimpleType
+				 */
 				public boolean visit(SimpleType node) {
 					ITypeBinding  typeBind = node.resolveBinding();
 					String typeNode = typeBind.getQualifiedName();
@@ -208,6 +233,9 @@ public class RecursiveTest {
 				}
 				
 				
+				/**
+				 * Visits the import declarations, adds to the counter
+				 */
 				public boolean visit(ImportDeclaration node) {
 					IBinding typeBind = node.resolveBinding();
 					String typeNode = typeBind.getName();
@@ -277,46 +305,45 @@ public class RecursiveTest {
 		return content.toCharArray();
 	}
 	
-
-	
-	
+	/**
+	 * File recursion is handled here, folders within folders are checked for .java files
+	 * the files are added to an array list which is returned later to be parsed and have their
+	 * declarations and references to be counted
+	 * @param dir
+	 */
 	public static void displayDirectoryContents(File dir) {
+		
 		Set<String> hs = new HashSet<>();
-		try {
-			File[] files = dir.listFiles();
-			for (File file : files) {
-				if (file.isDirectory()) {
-					System.out.println("directory:" + file.getCanonicalPath());
-					displayDirectoryContents(file);
-				} else {
-					 files = dir.listFiles(new FilenameFilter(){
-							public boolean accept(File dir, String name){
-								if(name.toLowerCase().endsWith(".java"))
-									return name.toLowerCase().endsWith("java");
-								else
-									return name.toLowerCase().endsWith("jar");
-							} 		
-					 });
-					 
-					 for(int i = 0; i < files.length; i++){
-							String filePath = files[i].getPath();
-					
-							fileList.add(filePath);
-					 }
-					}
+		
+		File[] files = dir.listFiles();
+		for (File file : files) {
+			if (file.isDirectory()) {
+			//	System.out.println("directory:" + file.getCanonicalPath());
+				displayDirectoryContents(file);
+			} else {
+				 files = dir.listFiles(new FilenameFilter(){
+						public boolean accept(File dir, String name){
+							if(name.toLowerCase().endsWith(".java"))
+								return name.toLowerCase().endsWith("java");
+							else
+								return name.toLowerCase().endsWith("jar");
+						} 		
+				 });
+				 
+				 for(int i = 0; i < files.length; i++){
+						String filePath = files[i].getPath();
+				
+						fileList.add(filePath);
+				 }
 				}
-			
-			System.out.println(Arrays.toString(files));
-		hs.addAll(fileList);
-		fileList.clear();
-		fileList.addAll(hs);
+			}
 		
-		
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		//System.out.println(Arrays.toString(files));
+hs.addAll(fileList);
+fileList.clear();
+fileList.addAll(hs);
 	
-		System.out.println(Arrays.deepToString(fileList.toArray()));	
+		//System.out.println(Arrays.deepToString(fileList.toArray()));	
 	}
 	
 	

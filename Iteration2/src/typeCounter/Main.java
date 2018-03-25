@@ -34,7 +34,7 @@ public class Main {
 		
 		
 	
-			RecursiveTest rt = new RecursiveTest(pathOrJars);// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
+			DeclarationsAndReferencesCounter rt = new DeclarationsAndReferencesCounter(pathOrJars);// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
 			rt.countInJarOrDirectory();// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
 
 		//	 CounterInJar ct = new CounterInJar(pathOrJars);

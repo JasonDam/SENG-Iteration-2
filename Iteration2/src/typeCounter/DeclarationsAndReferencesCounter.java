@@ -256,6 +256,26 @@ public class DeclarationsAndReferencesCounter {
 				}
 		
 				
+				public boolean visit(NormalAnnotation node) {
+					IBinding typeBind = node.resolveAnnotationBinding();
+					String typeNode = typeBind.getName();
+					if(typeMap.containsKey(typeNode)) {
+						ArrayList<Integer> currentArray = typeMap.get(typeNode); //rcount
+						int currentValue = currentArray.get(1);
+						currentArray.set(1, currentValue+1);
+						
+						typeMap.replace(typeNode, currentArray);
+					}
+					else { 
+						ArrayList<Integer> intArray = new ArrayList<Integer>();
+						intArray.add(0);
+						intArray.add(1);
+						typeMap.put(typeNode,intArray);
+					}
+					return true;
+				}
+	
+				
 				});
 			}
 		

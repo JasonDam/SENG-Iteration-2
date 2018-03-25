@@ -68,7 +68,7 @@ public class DeclarationsAndReferencesCounter {
 	/**
 	 * After the entries extracted from the jar files have been extracted, and has gone through the parser and counters
 	 * the folder containing the extracted files are deleted so there is no overlap when the program is ran again
-	 * source: 
+	 * source: https://stackoverflow.com/questions/20281835/how-to-delete-a-folder-with-files-using-java
 	 * @param file
 	 */
 	private void deleteDirectory(File file ) {

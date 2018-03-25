@@ -266,11 +266,7 @@ public class RecursiveTest {
 					 }
 					}
 				}
-			//Users/TonyTea/Documents/GitHub/SENG-Iteration-2/Iteration2/src/JarFIleSecondTest/FolderInJar2ndTest/ClassInFolderOfFodlerinJar2ndTestNumberTow.java, 
-			//Users/TonyTea/Documents/GitHub/SENG-Iteration-2/Iteration2/src/JarFIleSecondTest/FolderInJar2ndTest/ClassInFolderOfFolderinJar2ndTest.java, 
-			//Users/TonyTea/Documents/GitHub/SENG-Iteration-2/Iteration2/src/JarFIleSecondTest/FolderInJar2ndTest/FolderinFolderinJar2ndTest/LastFolderClass.java, 
-			//Users/TonyTea/Documents/GitHub/SENG-Iteration-2/Iteration2/src/JarFIleSecondTest/ClassInJarFile2ndTest.java]
-			// used THIS to print out that .java files are filtered out from EACH directory given, recursively
+			
 			System.out.println(Arrays.toString(files));
 		hs.addAll(fileList);
 		fileList.clear();
@@ -320,72 +316,6 @@ public class RecursiveTest {
 			return destdir;
 	}
 	
-	public ArrayList<String> getJarElements() throws IOException {
-		Set<String> hs = new HashSet<>();
-		ArrayList <String> classNames = new ArrayList<String>();
-		
-		 final ZipFile zf = new ZipFile(this.folderPath);
-		    try {
-		        for (ZipEntry ze : Collections.list(zf.entries())) {
-		            final String path = ze.getName();
-		            if (path.endsWith(".java")) {
-		                final StringBuilder buf = new StringBuilder(path);
-		               // buf.delete(path.lastIndexOf('/'), path.length()); //removes the name of the class to get the path only
-		                //if (!path.startsWith("/")) { //you may omit this part if leading / is not required
-		                  //  buf.insert(0, '/');
-		               // }
-		                System.out.println(buf.toString());
-		                
-		                File file = new File(buf.toString());
-		                String fileName = file.getAbsolutePath();
-		                classNames.add(fileName);
-		             //   System.out.print(fileName);
-		              
-		            }
-		        }
-		    } finally {
-		        zf.close();
-		    }
-		//ZipInputStream zip = new ZipInputStream(new FileInputStream(this.folderPath));
-		//for (ZipEntry entry = zip.getNextEntry(); entry!= null; entry = zip.getNextEntry()) {
-	
-	//		if (entry.isDirectory()) {
-	//			System.out.print("HEY");
-	//		String filePath = entry.getName();
-	//		File dir = new File(filePath);
-	//		String javaFileInFolder = getJavaStuff(dir);
-	//		String justNameOne = javaFileInFolder.substring(javaFileInFolder.lastIndexOf("/") +1);
-	//		File nameFileOne = new File(justNameOne);
-	//		String absPathOne = nameFileOne.getAbsolutePath();
-	//		classNames.add(absPathOne);
-			
-			
-	//		}
-			
-		//	 if (!entry.isDirectory() && entry.getName().endsWith(".java")) {
-		//		String className = entry.getName();
-		//		System.out.println(className);
-		//		String justName = className.substring(className.lastIndexOf("/") +1);
-		//		File nameFile = new File(justName);
-			//	System.out.println(justName);
-				//String absPath = nameFile.getCanonicalPath();
-				//System.out.println(absPath);
-				//classNames.add(absPath);
 
-		//	}
-		//}
-		
-		//hs.addAll(classNames);
-		//classNames.clear();
-		//classNames.addAll(hs);
-	//	System.out.print(classNames);
-		
-	//	 for(int i = 0; i < classNames.size(); i++){
-	///			System.out.println(classNames.get(i));
-				
-		// }
-		    System.out.print(classNames);
-		return classNames;
-	}
 }
 

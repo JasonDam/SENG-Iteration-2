@@ -1,9 +1,8 @@
 // SENG300 Iteration2
 // Members: Tony, Logan, Evan, Jason, Kristopher
+// Run the program through Main
 
 package typeCounter;
-
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
@@ -92,7 +91,7 @@ public class DeclarationsAndReferencesCounter {
 		for (String key: typeMap.keySet()) {
 			ArrayList<Integer> currentArray = typeMap.get(key);
 			//System.out.println(key+ " Declarations found: " + currentArray.get(0)+"; References found: " + currentArray.get(1)+".");
-			System.out.printf("Declarations found: %5d, References found: %5d \n", currentArray.get(0), currentArray.get(1));
+			System.out.printf("%8s Declarations found: %1d, References found: %1d \n", key, currentArray.get(0), currentArray.get(1));
 		}
 	}
 	
@@ -113,13 +112,14 @@ public class DeclarationsAndReferencesCounter {
 					ITypeBinding typeBind = node.resolveBinding();
 					String nodeName = typeBind.getQualifiedName();
 					if(typeMap.containsKey(nodeName)) {
+						
 						ArrayList<Integer> currentArray = typeMap.get(nodeName); 
 						int currentValue = currentArray.get(0);
 						currentArray.set(0, currentValue+1);
-						
 						typeMap.replace(nodeName, currentArray);
 					}
 					else {
+						
 						ArrayList<Integer> intArray = new ArrayList<Integer>();
 						intArray.add(1);
 						intArray.add(0);
@@ -318,8 +318,7 @@ public class DeclarationsAndReferencesCounter {
 		File[] files = dir.listFiles();
 		for (File file : files) {
 			if (file.isDirectory()) {
-			//	System.out.println("directory:" + file.getCanonicalPath());
-				displayDirectoryContents(file);
+				displayDirectoryContents(file); // recursive call if the file is a directory
 			} else {
 				 files = dir.listFiles(new FilenameFilter(){
 						public boolean accept(File dir, String name){
@@ -335,15 +334,12 @@ public class DeclarationsAndReferencesCounter {
 				
 						fileList.add(filePath);
 				 }
-				}
-			}
-		
-		//System.out.println(Arrays.toString(files));
-hs.addAll(fileList);
-fileList.clear();
-fileList.addAll(hs);
+			   }
+			 }
 	
-		//System.out.println(Arrays.deepToString(fileList.toArray()));	
+		hs.addAll(fileList);
+		fileList.clear();
+		fileList.addAll(hs);
 	}
 	
 	
@@ -358,7 +354,6 @@ fileList.addAll(hs);
 		    java.util.Enumeration<java.util.jar.JarEntry> enu= jarfile.entries();
 		    while(enu.hasMoreElements())
 		    {
-		  
 		    		File file = new File(this.folderPath);
 		    		String result = file.getName().split(".jar")[0];
 		    		System.out.println(result);
@@ -392,7 +387,5 @@ fileList.addAll(hs);
 		    }
 			
 	}
-	
-
 }
 

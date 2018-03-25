@@ -10,36 +10,21 @@ import java.util.Scanner;
  */
 public class Main {
 	private static String pathOrJars;
-//	private static String path;
-	
-	
 
 	public static void main(String args[]) throws IOException{
 		Scanner reader = new Scanner(System.in);
 		if(args.length == 2){
-			// Use arguments if they exist
-			//path = args[0];
 			pathOrJars = args[0];
-		} else {
-			// Else ask for arguments
-			//System.out.println("No arguments specified.");
-			System.out.print("Enter PATHNAME for JARFILE:");
-	///		path = reader.nextLine();
+		} 
+		else {
+			System.out.print("Enter PATHNAME for PATHNAME WITH JARFILE:");
 			pathOrJars = reader.nextLine();
-				}
+		}
 	
-		//File currentDir = new File(path);
 		File pathOrJarFile = new File(pathOrJars);
-	//	reader.close();
+		reader.close();
 		
-		
-	
-			DeclarationsAndReferencesCounter rt = new DeclarationsAndReferencesCounter(pathOrJars);// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
-			rt.countInJarOrDirectory();// LET THIS ONE RUN 1 FOR DIRECTORY TYPES
-
-		//	 CounterInJar ct = new CounterInJar(pathOrJars);
-		//	 ct.getJarElements(); 
-				
-		
+		DeclarationsAndReferencesCounter rt = new DeclarationsAndReferencesCounter(pathOrJars);
+		rt.countInJarOrDirectory();
 	}
 }

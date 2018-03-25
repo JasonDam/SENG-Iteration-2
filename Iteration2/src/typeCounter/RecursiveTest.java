@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,16 +37,23 @@ public class RecursiveTest {
 	public RecursiveTest(String path) throws IOException {
 		this.folderPath = path;
 		this.currentDir = new File(path);
+		this.destdir = (this.folderPath.split(".jar")[0]);
 
 	}
 	
 	public void countInJarOrDirectory() throws IOException {
 		if (this.folderPath.endsWith(".jar")) {
+	//		File file = new File(this.folderPath);
+	///		String somename = file.getName();
+	 		String result = this.folderPath.split(".jar")[0];
+			System.out.println(result);
 			this.extractJarFiles();
-			this.currentDir = new File("/Users/TonyTea/Desktop/destinationDirectoryOne");
-			this.displayDirectoryContents(currentDir);
+		;
+			this.displayDirectoryContents(new File(result));
 			this.findDeclarations();
 			this.printResults();
+			this.deleteDirectory(new File(this.destdir));
+			
 			
 			//	this.getJarElements();
 		//	fileList = this.getJarElements();
@@ -59,10 +67,21 @@ public class RecursiveTest {
 		}
 }
 	
+	private void deleteDirectory(File file ) {
+		
+		File[] contents = file.listFiles();
+		if(contents != null) {
+			for (File f: contents) {
+				deleteDirectory(f);
+			}
+		}
+		file.delete();
+	}
+
 	public void printResults(){
 		for (String key: typeMap.keySet()) {
 			ArrayList<Integer> currentArray = typeMap.get(key);
-			System.out.println(key+ "Declarations found:" + currentArray.get(0)+"; References found: " + currentArray.get(1)+".");
+			System.out.println(key+ " Declarations found: " + currentArray.get(0)+"; References found: " + currentArray.get(1)+".");
 		}
 	}
 	protected void findDeclarations(){
@@ -187,8 +206,35 @@ public class RecursiveTest {
 					return false;
 				}
 				
+				public boolean visit(PrimitiveType node) {
+					ITypeBinding rNode = node.resolveBinding();
+					String nodeString = rNode.getQualifiedName();
+					if (typeMap.containsKey(nodeString)) {
+						ArrayList<Integer> currentArray = typeMap.get(nodeString);
+						int currentValue = currentArray.get(1);
+						currentArray.set(1, currentValue+1);
+						
+						typeMap.replace(nodeString, currentArray);
+					}
+					else {
+						ArrayList<Integer> intArray = new ArrayList<Integer>();
+						intArray.add(0);
+						intArray.add(1);
+						typeMap.put(nodeString, intArray);
+					}
+				//	System.out.print(typeNode);
+					return true;
+				}
+				
+			//	public boolean visit(ClassInstanceCreation node) {
+			//		return false;
+					
+			//	}
+				
+				
 				});
 			}
+		
 		}
 	
 
@@ -287,19 +333,32 @@ public class RecursiveTest {
 	 * @return
 	 * @throws IOException
 	 */
-	public String extractJarFiles() throws IOException {
+	public void extractJarFiles() throws IOException {
 		 java.util.jar.JarFile jarfile = new java.util.jar.JarFile(new java.io.File(this.folderPath)); //jar file path(here sqljdbc4.jar)
 		    java.util.Enumeration<java.util.jar.JarEntry> enu= jarfile.entries();
 		    while(enu.hasMoreElements())
 		    {
 		    		// get user to enter directory
-		        String destdir = "/Users/TonyTea/Desktop/destinationDirectoryOne";     //abc is my destination directory
+		       // String destdir = "Desktop";     //abc is my destination directory
+		       
+		    	//	String desdir = "Desktop";
+		    	//	System.out.println(uniqueFolderName);
+		    		File file = new File(this.folderPath);
+		    		String result = file.getName().split(".jar")[0];
+		    		System.out.println(result);
+		    		File dir = new File(result);
+		        dir.mkdir();
+		        
+		        
+		        
 		        java.util.jar.JarEntry je = enu.nextElement();
 
 		        System.out.println(je.getName());
-
+		        
 		        java.io.File fl = new java.io.File(destdir, je.getName());
+		        
 		        if(!fl.exists())
+		        	
 		        {
 		            fl.getParentFile().mkdirs();
 		            fl = new java.io.File(destdir, je.getName());
@@ -317,7 +376,7 @@ public class RecursiveTest {
 		        fo.close();
 		        is.close();
 		    }
-			return destdir;
+			
 	}
 	
 

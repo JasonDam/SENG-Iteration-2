@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.Scanner;
 
 /**
- * Driver accepting the path and type
- * @author Tony
+ * Driver accepting the path 
+ * @author Tony, Logan, Evan, Jason, Kris
  *
  */
 public class Main {

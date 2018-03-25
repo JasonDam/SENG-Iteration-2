@@ -50,7 +50,6 @@ public class DeclarationsAndReferencesCounter {
 	
 		if (this.folderPath.endsWith(".jar")) {
 	 		String result = this.folderPath.split(".jar")[0];
-			System.out.println(result);
 			this.extractJarFiles();
 		
 			this.displayDirectoryContents(new File(result));
@@ -90,7 +89,6 @@ public class DeclarationsAndReferencesCounter {
 	private void printResults(){
 		for (String key: typeMap.keySet()) {
 			ArrayList<Integer> currentArray = typeMap.get(key);
-			//System.out.println(key+ " Declarations found: " + currentArray.get(0)+"; References found: " + currentArray.get(1)+".");
 			System.out.printf("%8s Declarations found: %1d, References found: %1d \n", key, currentArray.get(0), currentArray.get(1));
 		}
 	}
@@ -376,13 +374,10 @@ public class DeclarationsAndReferencesCounter {
 		    {
 		    		File file = new File(this.folderPath);
 		    		String result = file.getName().split(".jar")[0];
-		    		System.out.println(result);
 		    		File dir = new File(result);
 		        dir.mkdir();
 		  
 		        java.util.jar.JarEntry je = enu.nextElement();
-
-		        System.out.println(je.getName());
 		        
 		        java.io.File fl = new java.io.File(destdir, je.getName());
 		        

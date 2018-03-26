@@ -13,7 +13,7 @@ public class Main {
 
 	public static void main(String args[]) throws IOException{
 		Scanner reader = new Scanner(System.in);
-		if(args.length == 2){
+		if(args.length == 1){
 			pathOrJars = args[0];
 		} 
 		else {

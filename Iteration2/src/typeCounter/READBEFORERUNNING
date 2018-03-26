@@ -1,0 +1,24 @@
+Note Program is ran through Main.java
+When entering a directory, do not include the .java files at the end of the name..
+
+EXAMPLE
+
+/Users/TonyTea/Downloads/Iteration+Diagram+Log 4/SENG300project3/src/Other
+
+- where Other is a folder containing the class OtherDummyClass.java
+
+When entering a jar file, please DO include the .jar file at the end of the path.
+
+EXAMPLE
+
+/Users/TonyTea/Desktop/It10.jar
+
+
+
+
+
+TESTING
+
+The Testing is ran through TestSuite...
+a jar file named "testJAVA.jar" is included in the submission, please get the pathname of this and replace one in the variable
+arg[0] in the method initialization.

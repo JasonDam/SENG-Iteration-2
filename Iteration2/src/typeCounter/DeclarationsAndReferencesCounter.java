@@ -253,7 +253,9 @@ public class DeclarationsAndReferencesCounter {
 					return true;
 				}
 		
-				
+				/**
+				 * Counts the references involved in annotations that are not declarations
+				 */
 				public boolean visit(NormalAnnotation node) {
 					IBinding typeBind = node.resolveAnnotationBinding();
 					String typeNode = typeBind.getName();
@@ -286,7 +288,7 @@ public class DeclarationsAndReferencesCounter {
 	 * @param fileName
 	 * @return a Compilation Unit from the string
 	 */
-	private CompilationUnit parse(String fileName){
+	public CompilationUnit parse(String fileName){
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 		parser.setSource(fileContentToCharArray(fileName));
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -374,25 +376,25 @@ public class DeclarationsAndReferencesCounter {
 		    {
 		    		File file = new File(this.folderPath);
 		    		String result = file.getName().split(".jar")[0];
-		    		File dir = new File(result);
-		        dir.mkdir();
+		    		File direct = new File(result);
+		        direct.mkdir();
 		  
 		        java.util.jar.JarEntry je = enu.nextElement();
 		        
-		        java.io.File fl = new java.io.File(destdir, je.getName());
+		        java.io.File ioFile = new java.io.File(destdir, je.getName());
 		        
-		        if(!fl.exists())
+		        if(!ioFile.exists())
 		        	
 		        {
-		            fl.getParentFile().mkdirs();
-		            fl = new java.io.File(destdir, je.getName());
+		            ioFile.getParentFile().mkdirs();
+		            ioFile = new java.io.File(destdir, je.getName());
 		        }
 		        if(je.isDirectory())
 		        {
 		            continue;
 		        }
 		        java.io.InputStream is = jarfile.getInputStream(je);
-		        java.io.FileOutputStream fo = new java.io.FileOutputStream(fl);
+		        java.io.FileOutputStream fo = new java.io.FileOutputStream(ioFile);
 		        while(is.available()>0)
 		        {
 		            fo.write(is.read());
@@ -401,6 +403,14 @@ public class DeclarationsAndReferencesCounter {
 		        is.close();
 		    }
 			
+	}
+	
+	/**
+	 * for testing purposes
+	 * @return
+	 */
+	public Map getMap() {
+		return this.typeMap;
 	}
 }
 
